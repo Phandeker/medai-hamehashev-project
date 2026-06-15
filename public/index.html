@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCS | Moka coffee shop</title>
+    <meta name="description" content="Artisanal coffee, freshly roasted beans, and premium bakery items. Experience coffee perfection.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Style Sheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="app-header">
+        <div class="header-container">
+            <a href="#" class="logo" id="nav-logo">
+                <i class="fa-solid fa-mug-hot"></i>
+                <span>MCS | Moka coffee shop</span>
+            </a>
+            
+            <nav class="nav-menu" id="nav-menu">
+                <a href="#shop" class="nav-link active" id="link-shop">
+                    <i class="fa-solid fa-coffee-bean"></i> Shop
+                </a>
+                <a href="#orders" class="nav-link hidden" id="link-orders">
+                    <i class="fa-solid fa-receipt"></i> My Orders
+                </a>
+                <a href="#admin" class="nav-link hidden" id="link-admin">
+                    <i class="fa-solid fa-sliders"></i> Admin Panel
+                </a>
+                <a href="#auth" class="nav-link" id="link-auth">
+                    <i class="fa-solid fa-user-lock"></i> Sign In
+                </a>
+                <a href="#logout" class="nav-link hidden" id="link-logout">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </a>
+            </nav>
+
+            <div class="header-actions">
+                <button class="cart-toggle-btn" id="cart-toggle-btn" aria-label="Open Cart">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span class="cart-badge" id="cart-badge">0</span>
+                </button>
+                <span class="user-greeting hidden" id="user-greeting"></span>
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Shopping Cart Drawer (Overlay) -->
+    <div class="cart-drawer-overlay" id="cart-drawer-overlay"></div>
+    <aside class="cart-drawer" id="cart-drawer">
+        <div class="cart-drawer-header">
+            <h3><i class="fa-solid fa-bag-shopping"></i> Your Bag</h3>
+            <button class="cart-close-btn" id="cart-close-btn" aria-label="Close Cart">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        
+        <div class="cart-drawer-content" id="cart-items-container">
+            <!-- Dynamic Cart Items -->
+            <div class="cart-empty-state">
+                <i class="fa-solid fa-mug-saucer"></i>
+                <p>Your bag is empty. Let's add some coffee!</p>
+                <button class="btn btn-primary" id="btn-back-to-shop">Browse Menu</button>
+            </div>
+        </div>
+
+        <div class="cart-drawer-footer">
+            <div class="cart-totals">
+                <span>Total:</span>
+                <span class="cart-total-price" id="cart-total-price">₪0.00</span>
+            </div>
+            <button class="btn btn-accent btn-full" id="btn-checkout">
+                Place Order <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Container -->
+    <main class="main-content" id="main-content">
+        <!-- Views will be injected here via JavaScript -->
+    </main>
+
+    <!-- Product Editor Modal (Admin CRUD) -->
+    <div class="modal-overlay" id="product-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modal-title">Add New Product</h3>
+                <button class="modal-close-btn" id="product-modal-close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="product-form" novalidate>
+                    <input type="hidden" id="product-id">
+                    
+                    <div class="form-group">
+                        <label for="product-name">Product Name *</label>
+                        <input type="text" id="product-name" required placeholder="e.g. Pistachio Latte">
+                        <span class="validation-error" id="err-product-name"></span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="product-category">Category *</label>
+                            <select id="product-category" required>
+                                <option value="" disabled selected>Select Category</option>
+                                <option value="Hot Drinks">Hot Drinks</option>
+                                <option value="Cold Drinks">Cold Drinks</option>
+                                <option value="Bakery">Bakery</option>
+                            </select>
+                            <span class="validation-error" id="err-product-category"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="product-price">Price (₪) *</label>
+                            <input type="number" id="product-price" step="0.01" min="0.01" required placeholder="e.g. 4.99">
+                            <span class="validation-error" id="err-product-price"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-description">Description *</label>
+                        <textarea id="product-description" rows="3" required placeholder="Describe the flavors, bean origin, etc."></textarea>
+                        <span class="validation-error" id="err-product-description"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-image">Image URL *</label>
+                        <input type="text" id="product-image" required placeholder="e.g. /images/cappuccino.jpg">
+                        <span class="validation-error" id="err-product-image"></span>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="product-available" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span class="checkbox-label">Available for Purchase</span>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="btn-cancel-product">Cancel</button>
+                        <button type="submit" class="btn btn-accent" id="btn-save-product">Save Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Details Modal (Public Info View) -->
+    <div class="modal-overlay" id="product-details-modal">
+        <div class="modal-card" style="max-width: 650px;">
+            <div class="modal-header">
+                <h3 id="detail-modal-title">Coffee Details</h3>
+                <button class="modal-close-btn" id="product-details-close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="product-details-body" style="padding: 0;">
+                <!-- Dynamically loaded details layout -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <i class="fa-solid fa-mug-hot"></i> MCS | Moka coffee shop
+            </div>
+            <p class="footer-copy">&copy; 2026 MCS | Moka coffee shop. Crafted with passion. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- App JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>
